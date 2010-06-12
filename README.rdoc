@@ -1,6 +1,7 @@
 = Lurker
 
-Description goes here.
+The IRC LogBot as a gem for our Lurking project.
+Web-Interface thingy repo coming when this is finished.
 
 == Note on Patches/Pull Requests
  
