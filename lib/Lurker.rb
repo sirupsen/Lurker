@@ -81,7 +81,7 @@ class Lurker
         #puts "(#{time.hour}:#{time.min}:#{time.sec}) #{username}: #{msg}"
         
         # Put into database
-        document = {"name" => username, "message" => msg, "timestamp" => Time.now.to_i}
+        document = {"name" => username, "message" => msg, "timestamp" => time.to_i}
         @collection.insert(document)
       elsif line[0] == PING
         @socket.send "PONG #{line[1]}", 0
