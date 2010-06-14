@@ -30,13 +30,13 @@ class Lurker
       #Respond to pings.
       line = @s.gets #Receive.
       p line  #For debug purposes.
-      line = line.chomp.split(" ")
+      line = line.chomp.split(" ").strip
 
       if line[1] == "PRIVMSG"
-        guy = line[0].split("!")[0]
-        msg = line[3..-1].join(" ")
-        p "#{guy} #{line[3..-1].join(" ")}" #For debug purposes.
-        doc = {"name" => guy, "message" => msg, "date" => Time.now.to_i}
+        guy = line[0].split("!")[0][1..-1]
+        msg = line[3..-1].join(" ")[1..-1]
+        p "#{guy}: #{msg}" #For debug purposes.
+        doc = {"name" => guy, "message" => msg, "timestamp" => Time.now.to_i}
         @coll.insert(doc)
       elsif line[0] == "PING"
         @s.send "PONG #{line[1]}", 0
