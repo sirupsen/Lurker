@@ -7,9 +7,11 @@
 
 %w{
   extensions
-  plugins.rb
+  plugins
+
   plugins/logger
   plugins/kitten_command
+
   irc
   worker
 }.each {|lib| require "lurker/#{lib}"}
