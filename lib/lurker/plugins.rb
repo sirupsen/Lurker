@@ -1,5 +1,6 @@
 module Lurker
   module Plugins
+    # @TODO Save and load this stuff from a YAML file
     def plugins
       @plugins ||= {
         :Logger => true,
