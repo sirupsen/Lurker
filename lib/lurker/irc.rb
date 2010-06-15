@@ -11,9 +11,9 @@ module Lurker
 
     def set_defaults
       # Set name, and join channel
-      @socket.send "USER Lurker durr derp :no wai \n", 0
-      @socket.send "NICK #{@name} \n", 0
-      @socket.send "JOIN ##{@channel} \n", 0
+      send "USER Lurker durr derp :no wai \n"
+      send "NICK #{@name} \n"
+      send "JOIN ##{@channel} \n"
     end
 
     def gets
@@ -32,11 +32,15 @@ module Lurker
     end
 
     def pong
-      @socket.send "PONG #{line[:type]}", 0
+      send "PONG #{line[:type]}"
     end
 
-    def send(msg)
-      @socket.send(msg)
+    def send(msg, n = 0)
+      @socket.send(msg + "\n", n)
+    end
+
+    def msg(message)
+      send "PRIVMSG ##{@channel} : #{message}\r"
     end
   end
 end

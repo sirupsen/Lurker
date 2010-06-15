@@ -1,7 +1,7 @@
 module Lurker
   class Worker
     include Plugins
-    attr_reader :server, :channel, :port, :name
+    attr_reader :server, :channel, :port, :name, :irc
 
     def initialize(channel, server, port, name)
       #Make variables we will use.

@@ -4,6 +4,7 @@ module Lurker
     def plugins
       @plugins ||= {
         :Logger => true,
+        :KittenCommand => true,
       }
     end
 
