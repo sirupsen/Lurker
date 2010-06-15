@@ -3,16 +3,9 @@ module Lurker
     def initialize(channel, server, port, name)
       #Make variables we will use.
       @channel, @server, @port, @name = channel, server, port, name
-      @db = Mongo::Connection.new("localhost").db("lurker")
     end
 
     def connect
-      # Appropriate collection name:
-      #   host__channel
-      # E.g.
-      #   irc_freenode_net__lurker
-      @collection = @db.collection(collection_name)
-
       # Connect to IRC
       @irc = Irc.new(@channel, @server, @port, @name)
       # Send Ident, name, etc.
@@ -41,6 +34,9 @@ module Lurker
     private
       # TODO make this a plugin
       def log(line)
+        db = Mongo::Connection.new("localhost").db("lurker")
+        collection = db.collection(collection_name)
+
         document = {
           "username"  => line[:username],
           "user"      => line[:user],
@@ -48,11 +44,14 @@ module Lurker
           "message"   => line[:message],
           "timestamp" => Time.now.to_i
         }
-
-        @collection.insert(document)
+        collection.insert(document)
       end
 
       def collection_name
+        # Appropriate collection name:
+        #   host__channel
+        # E.g.
+        #   irc_freenode_net__lurker
         "#{@server.gsub(".", "_")}__#{@channel.gsub(".", "_")}"
       end
 
