@@ -1,5 +1,8 @@
 module Lurker
   class Worker
+    include Plugins
+    attr_reader :server, :channel, :port, :name
+
     def initialize(channel, server, port, name)
       #Make variables we will use.
       @channel, @server, @port, @name = channel, server, port, name
@@ -20,7 +23,7 @@ module Lurker
 
         case line[:type]
           when "PRIVMSG"
-            log(line)
+            run_plugins(line, self)
           when "PING"
             @irc.pong
         end
@@ -33,28 +36,6 @@ module Lurker
 
     private
       # TODO make this a plugin
-      def log(line)
-        db = Mongo::Connection.new("localhost").db("lurker")
-        collection = db.collection(collection_name)
-
-        document = {
-          "username"  => line[:username],
-          "user"      => line[:user],
-          "type"      => line[:type],
-          "message"   => line[:message],
-          "timestamp" => Time.now.to_i
-        }
-        collection.insert(document)
-      end
-
-      def collection_name
-        # Appropriate collection name:
-        #   host__channel
-        # E.g.
-        #   irc_freenode_net__lurker
-        "#{@server.gsub(".", "_")}__#{@channel.gsub(".", "_")}"
-      end
-
       def debug(line)
         time = Time.now
         puts "(#{time.hour}:#{time.min}:#{time.sec}) #{line[:username]}: #{line[:message]}"       
